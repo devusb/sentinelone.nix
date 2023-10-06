@@ -5,6 +5,8 @@ let
   initScript = pkgs.writeShellScriptBin "sentinelone-init.sh" ''
     #!/bin/bash
 
+    mkdir -p ${cfg.dataDir}
+
     # initialize the data directory
     if [ -z "$(ls -A ${cfg.dataDir} 2>/dev/null)" ]; then
       cp -r ${pkgs.sentinelone}/opt/sentinelone/* ${cfg.dataDir}
@@ -22,8 +24,8 @@ let
       "SERVICE_TYPE": "systemd"
     }
     EOF
-        siteKey=$(echo ${cfg.sentinelOneManagementToken} | base64 -d | ${getExe pkgs.jq} .site_key)
-        mgmtUrl=$(echo ${cfg.sentinelOneManagementToken} | base64 -d | ${getExe pkgs.jq} .url)
+      siteKey=$(echo ${cfg.sentinelOneManagementToken} | base64 -d | ${getExe pkgs.jq} .site_key)
+      mgmtUrl=$(echo ${cfg.sentinelOneManagementToken} | base64 -d | ${getExe pkgs.jq} .url)
       cat << EOF > ${cfg.dataDir}/configuration/basic.conf
     {
         "mgmt_device-type": 1,
