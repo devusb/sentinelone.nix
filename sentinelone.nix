@@ -11,13 +11,13 @@
 let
   sentinelOnePackage = "SentinelAgent-Linux-22-3-3-11-x86-64-release-22-3-3_linux_v22_3_3_11.deb";
 in
-stdenv.mkDerivation rec {
-  pname   = "sentinelone";
+stdenv.mkDerivation {
+  pname = "sentinelone";
   version = "22.3.3.11";
 
   src = fetchurl {
-      url = "https://imugit.imubit.com/morgan.helton/sentinelone/-/raw/main/${sentinelOnePackage}";
-      hash = "sha256-Ti9y5VLLMa7CQMJJpJuAiaNwZyf2VSaeD1o/cCPPfUk=";
+    url = "https://imugit.imubit.com/morgan.helton/sentinelone/-/raw/main/${sentinelOnePackage}";
+    hash = "sha256-Ti9y5VLLMa7CQMJJpJuAiaNwZyf2VSaeD1o/cCPPfUk=";
   };
 
   unpackPhase = ''
