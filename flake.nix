@@ -18,7 +18,7 @@
       };
 
       nixosModules = {
-        sentinel-one = {
+        sentinelone = {
           imports = [
             ./module.nix
           ];
