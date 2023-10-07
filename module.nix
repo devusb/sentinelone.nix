@@ -102,20 +102,20 @@ in
       };
       serviceConfig = {
         Type = "forking";
-        ExecStart = "${pkgs.sentinelone}/bin/sentinelctl control run";
-        SyslogIdentifier = "/var/lib/sentinelone/log";
+        ExecStart = "${cfg.package}/bin/sentinelctl control run";
+        SyslogIdentifier = "${cfg.dataDir}/log";
         WatchdogSec = "5s";
         Restart = "always";
         StartLimitInterval = "90";
         StartLimitBurst = "4";
         RestartSec = "4";
         MemoryMax = "9223372036854771712";
-        ExecStop = "${pkgs.sentinelone}/bin/sentinelctl control shutdown";
+        ExecStop = "${cfg.package}/bin/sentinelctl control shutdown";
         NotifyAccess = "all";
         KillMode = "process";
-        PIDFile = "/var/lib/sentinelone/configuration/agent.pid";
+        PIDFile = "${cfg.dataDir}/configuration/agent.pid";
         TasksMax = "infinity";
-        BindPaths = "/var/lib/sentinelone:/opt/sentinelone";
+        BindPaths = "${cfg.dataDir}:/opt/sentinelone";
       };
       wantedBy = [ "multi-user.target" ];
     };
