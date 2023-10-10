@@ -43,7 +43,7 @@ in
     services = {
       sentinelone = {
         enable = mkEnableOption "SentinelOne Service";
-        package = mkPackageOption pkgs "sentinelone";
+        package = mkPackageOption pkgs "sentinelone" { };
         email = mkOption {
           type = types.str;
           example = "me@gmail.com";
