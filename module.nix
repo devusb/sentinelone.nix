@@ -12,7 +12,7 @@ let
       cp -r ${pkgs.sentinelone}/opt/sentinelone/* ${cfg.dataDir}
 
       cat << EOF > ${cfg.dataDir}/configuration/install_config
-    S1_AGENT_MANAGEMENT_TOKEN=${cfg.sentinelOneManagementToken}
+    S1_AGENT_MANAGEMENT_TOKEN=$(cat ${cfg.sentinelOneManagementTokenPath})
     S1_AGENT_DEVICE_TYPE=desktop
     S1_AGENT_AUTO_START=true
     S1_AGENT_CUSTOMER_ID=${cfg.email}-${cfg.serialNumber}
@@ -24,8 +24,8 @@ let
       "SERVICE_TYPE": "systemd"
     }
     EOF
-      siteKey=$(echo ${cfg.sentinelOneManagementToken} | base64 -d | ${getExe pkgs.jq} .site_key)
-      mgmtUrl=$(echo ${cfg.sentinelOneManagementToken} | base64 -d | ${getExe pkgs.jq} .url)
+      siteKey=$(cat ${cfg.sentinelOneManagementTokenPath} | base64 -d | ${getExe pkgs.jq} .site_key)
+      mgmtUrl=$(cat ${cfg.sentinelOneManagementTokenPath} | base64 -d | ${getExe pkgs.jq} .url)
       cat << EOF > ${cfg.dataDir}/configuration/basic.conf
     {
         "mgmt_device-type": 1,
@@ -52,9 +52,9 @@ in
           type = types.str;
           example = "FTXYZWW";
         };
-        sentinelOneManagementToken = mkOption {
-          type = types.str;
-          example = "eyxxxxyyyyzzz";
+        sentinelOneManagementTokenPath = mkOption {
+          type = types.path;
+          example = "/run/secrets/s1_mgmt_token";
         };
         dataDir = mkOption {
           type = types.path;
