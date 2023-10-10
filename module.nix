@@ -99,6 +99,8 @@ in
           "uptrack-prefetch.service"
           "uptrack.service"
         ];
+        StartLimitInterval = "90";
+        StartLimitBurst = "4";
       };
       serviceConfig = {
         Type = "forking";
@@ -106,8 +108,6 @@ in
         SyslogIdentifier = "${cfg.dataDir}/log";
         WatchdogSec = "5s";
         Restart = "always";
-        StartLimitInterval = "90";
-        StartLimitBurst = "4";
         RestartSec = "4";
         MemoryMax = "9223372036854771712";
         ExecStop = "${cfg.package}/bin/sentinelctl control shutdown";
