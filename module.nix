@@ -9,7 +9,7 @@ let
 
     # initialize the data directory
     if [ -z "$(ls -A ${cfg.dataDir} 2>/dev/null)" ]; then
-      cp -r ${pkgs.sentinelone}/opt/sentinelone/* ${cfg.dataDir}
+      cp -r ${cfg.package}/opt/sentinelone/* ${cfg.dataDir}
 
       cat << EOF > ${cfg.dataDir}/configuration/install_config
     S1_AGENT_MANAGEMENT_TOKEN=$(cat ${cfg.sentinelOneManagementTokenPath})
@@ -109,11 +109,11 @@ in
         WatchdogSec = "5s";
         Restart = "always";
         RestartSec = "4";
-        MemoryMax = "9223372036854771712";
+        PIDFile = "${cfg.dataDir}/configuration/agent.pid";
+        MemoryMax = "18446744073709543424";
         ExecStop = "${cfg.package}/bin/sentinelctl control shutdown";
         NotifyAccess = "all";
         KillMode = "process";
-        PIDFile = "${cfg.dataDir}/configuration/agent.pid";
         TasksMax = "infinity";
         BindPaths = "${cfg.dataDir}:/opt/sentinelone";
       };
