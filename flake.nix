@@ -24,6 +24,9 @@
           imports = [
             ./module.nix
           ];
+          nixpkgs.overlays = [
+            self.overlays.default
+          ];
         };
       };
     };
