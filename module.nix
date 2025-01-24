@@ -1,4 +1,9 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 with lib;
 let
   cfg = config.services.sentinelone;
@@ -105,21 +110,22 @@ in
       serviceConfig = {
         Type = "forking";
         ExecStart = "${cfg.package}/bin/sentinelctl control run";
+        WorkingDirectory = "${cfg.dataDir}/bin";
         SyslogIdentifier = "${cfg.dataDir}/log";
         WatchdogSec = "5s";
         Restart = "always";
         RestartSec = "4";
-        PIDFile = "${cfg.dataDir}/configuration/agent.pid";
+        RefuseManualStop = "yes";
         MemoryMax = "18446744073709543424";
         ExecStop = "${cfg.package}/bin/sentinelctl control shutdown";
         NotifyAccess = "all";
         KillMode = "process";
         TasksMax = "infinity";
-        BindPaths = "${cfg.dataDir}:/opt/sentinelone";
+        BindPaths = [
+          "${cfg.dataDir}:/opt/sentinelone"
+        ];
       };
       wantedBy = [ "multi-user.target" ];
     };
   };
 }
-
-
