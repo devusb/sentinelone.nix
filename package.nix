@@ -4,7 +4,7 @@
   dpkg,
   autoPatchelfHook,
   zlib,
-  libelf,
+  elfutils,
   dmidecode,
   jq,
   gcc-unwrapped,
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     dpkg
     autoPatchelfHook
     zlib
-    libelf
+    elfutils
     dmidecode
     jq
     gcc-unwrapped

@@ -14,7 +14,7 @@ let
 
     # initialize the data directory
     if [ -z "$(ls -A ${cfg.dataDir} 2>/dev/null)" ]; then
-      cp -r ${cfg.package}/opt/sentinelone/* ${cfg.dataDir}
+      find "${cfg.package}/opt/sentinelone/" -mindepth 1 -maxdepth 1 ! -name "bin" ! -name "ebpfs" ! -name "lib" ! -name "ranger" -exec cp -r {} "${cfg.dataDir}/" \;
 
       cat << EOF > ${cfg.dataDir}/configuration/install_config
     S1_AGENT_MANAGEMENT_TOKEN=$(cat ${cfg.sentinelOneManagementTokenPath})
@@ -110,7 +110,7 @@ in
       serviceConfig = {
         Type = "forking";
         ExecStart = "${cfg.package}/bin/sentinelctl control run";
-        WorkingDirectory = "${cfg.dataDir}/bin";
+        WorkingDirectory = "/opt/sentinelone/bin";
         SyslogIdentifier = "${cfg.dataDir}/log";
         WatchdogSec = "5s";
         Restart = "always";
@@ -123,6 +123,12 @@ in
         TasksMax = "infinity";
         BindPaths = [
           "${cfg.dataDir}:/opt/sentinelone"
+        ];
+        BindReadOnlyPaths = [
+          "${cfg.package}/opt/sentinelone/bin:/opt/sentinelone/bin"
+          "${cfg.package}/opt/sentinelone/ebpfs:/opt/sentinelone/ebpfs"
+          "${cfg.package}/opt/sentinelone/lib:/opt/sentinelone/lib"
+          "${cfg.package}/opt/sentinelone/ranger:/opt/sentinelone/ranger"
         ];
       };
       wantedBy = [ "multi-user.target" ];
